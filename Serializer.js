@@ -25,6 +25,7 @@ module.exports = class Serializer {
         // Process Objects
         if (typeof obj === 'object') {
             if (this.seen.includes(obj)) {
+                // cycle found
                 return
             }
 
@@ -54,6 +55,9 @@ module.exports = class Serializer {
             })
             console.log(`${spaces}}`)
             return
+        }
+        if (typeof obj === 'boolean') {
+            console.log(`${spaces}${name} = ${obj.toString()}`)
         }
 
         // Process Primitives
