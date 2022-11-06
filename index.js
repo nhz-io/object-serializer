@@ -19,5 +19,6 @@ const cycle = ['a', 'b', test]
 
 test.cycle = cycle
 
-// serializer.serialize(test)
+serializer.serialize(test)
+console.log('-------------------------')
 serializer.serialize(cycle)

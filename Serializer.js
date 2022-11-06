@@ -4,11 +4,10 @@ const indentSize = 2
 
 module.exports = class Serializer {
     constructor(indentSize) {
-        this.seen = []
         this.indentSize = indentSize || 2
     }
 
-    serialize(obj, name = 'arg', indent= 0) {
+    serialize(obj, name = 'arg', indent= 0, seen = []) {
         const spaces = " ".repeat(indentSize*indent)
 
         // Process null, undefined and NaN
@@ -24,18 +23,18 @@ module.exports = class Serializer {
 
         // Process Objects
         if (typeof obj === 'object') {
-            if (this.seen.includes(obj)) {
+            if (seen.includes(obj)) {
                 // cycle found
                 return
             }
 
-            this.seen.push(obj)
+            seen.push(obj)
 
             // Process Arrays
             if (Array.isArray(obj)) {
                 console.log(`${spaces}${name} = [`)
                 obj.forEach((val, idx) => {
-                    this.serialize(val, idx,indent + 1)
+                    this.serialize(val, idx,indent + 1, seen)
                 })
                 console.log(`${spaces}]`)
 
@@ -51,7 +50,7 @@ module.exports = class Serializer {
             // Process Plain Objects
             console.log(`${spaces}${name} = {`)
             Object.getOwnPropertyNames(obj).forEach(k => {
-                this.serialize(obj[k], k, indent + 1)
+                this.serialize(obj[k], k, indent + 1, seen)
             })
             console.log(`${spaces}}`)
             return
